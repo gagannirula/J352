@@ -1,0 +1,17 @@
+body {
+  background-color:#ffffff;
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h1 {
+background-color: #000000;
+color: #ffffff;
+padding: 50px 0 50px 50px;
+}
+
+.beetpic {
+  width: 400px;
+  margin: 0 50px 0 0;
