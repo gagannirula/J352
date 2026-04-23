@@ -1,0 +1,12 @@
+body {
+	background-color:#000;
+color:#fff;
+}
+
+
+  .button.black, .button.black.disabled, .button.black[disabled], .button.black.disabled:hover, .button.black[disabled]:hover, .button.black.disabled:focus, .button.black[disabled]:focus {
+    background-color: #000;
+    color: #000; }
+  .button.black:hover, .button.black:focus {
+    background-color: #1e1e1e;
+    color: #434343; }
