@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>September 11, 2001 — World Trade Center Timeline</title>
+  <style>
+    :root{
+      --bg:#f4f2ee;
+      --panel:#ffffff;
+      --text:#171717;
+      --muted:#686868;
+      --border:#d8d3cb;
+      --accent:#9c2f2f;
+      --accent-soft:#f4e5e5;
+      --line:#aaa39a;
+      --context:#6b7a8f;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      width:min(1100px, calc(100% - 32px));
+      margin:40px auto;
+    }
+    .header{
+      display:flex;
+      gap:24px;
+      justify-content:space-between;
+      align-items:flex-end;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .eyebrow{
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin:0 0 8px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(28px,4vw,48px);
+      line-height:1.05;
+      max-width:800px;
+    }
+    .intro{
+      margin:12px 0 0;
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:16px;
+    }
+    .summary{
+      border:1px solid var(--border);
+      background:var(--panel);
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:14px;
+      max-width:300px;
+    }
+    .summary strong{font-size:20px}
+    .timeline-card,
+    .detail-card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:16px;
+    }
+    .timeline-card{
+      padding:18px;
+      overflow:hidden;
+    }
+    .timeline-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      margin-bottom:8px;
+    }
+    .timeline-top span{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .scroller{
+      overflow-x:auto;
+      padding:6px 0 2px;
+    }
+    .timeline{
+      min-width:760px;
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:8px;
+      padding:24px 10px 16px;
+    }
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:6%;
+      right:6%;
+      top:58px;
+      height:2px;
+      background:var(--line);
+    }
+    .marker{
+      position:relative;
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+      border-radius:10px;
+      padding:0 6px 6px;
+      min-height:98px;
+      font:inherit;
+    }
+    .marker:focus-visible{
+      outline:3px solid rgba(156,47,47,.25);
+      outline-offset:3px;
+    }
+    .marker .time{
+      display:block;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:9px;
+      color:inherit;
+    }
+    .marker .dot{
+      width:18px;
+      height:18px;
+      display:block;
+      border-radius:50%;
+      border:3px solid var(--line);
+      background:var(--panel);
+      margin:0 auto;
+      position:relative;
+      z-index:2;
+      transition:.2s ease;
+    }
+    .marker .tag{
+      display:block;
+      font-size:12px;
+      line-height:1.25;
+      margin:10px auto 0;
+      max-width:100px;
+    }
+    .marker[aria-pressed="true"]{
+      color:var(--text);
+    }
+    .marker[aria-pressed="true"] .dot{
+      border-color:var(--accent);
+      background:var(--accent);
+      transform:scale(1.12);
+    }
+    .detail-card{
+      margin-top:18px;
+      padding:24px;
+      display:grid;
+      grid-template-columns:170px 1fr;
+      gap:24px;
+    }
+    .detail-time{
+      font-size:34px;
+      font-weight:700;
+      line-height:1;
+    }
+    .elapsed{
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:11px;
+      margin-top:8px;
+    }
+    .detail-head{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .detail-title{
+      font-size:23px;
+      margin:0;
+    }
+    .badge{
+      display:inline-block;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:12px;
+      color:var(--muted);
+      background:#faf9f7;
+    }
+    .detail-text,
+    .context{
+      line-height:1.65;
+      margin-bottom:0;
+    }
+    .detail-text{font-size:16px}
+    .context{
+      margin-top:16px;
+      padding-left:14px;
+      border-left:3px solid var(--context);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .stats{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    .stat{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:16px;
+    }
+    .stat strong{
+      display:block;
+      font-size:26px;
+      margin-bottom:4px;
+    }
+    .stat span{
+      color:var(--muted);
+      font-size:14px;
+    }
+    .note{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      margin:18px 4px 0;
+    }
+    @media (max-width:700px){
+      .wrap{width:min(100% - 20px,1100px);margin:20px auto}
+      .detail-card{grid-template-columns:1fr;gap:14px;padding:18px}
+      .stats{grid-template-columns:1fr}
+      .summary{max-width:none;width:100%}
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <div>
+        <p class="eyebrow">New York City · Eastern Daylight Time</p>
+        <h1>September 11, 2001 — World Trade Center Timeline</h1>
+        <p class="intro">Explore the major events at the World Trade Center on the morning of September 11, 2001. Select a timeline marker to view details and context.</p>
+      </div>
+      <div class="summary"><strong>102 minutes</strong><br>from the first WTC impact to the collapse of the North Tower</div>
+    </header>
+
+    <section class="timeline-card" aria-label="Interactive September 11 timeline">
+      <div class="timeline-top">
+        <span>Timeline</span>
+        <span>Select a marker</span>
+      </div>
+      <div class="scroller">
+        <div id="timeline" class="timeline"></div>
+      </div>
+    </section>
+
+    <section class="detail-card" aria-live="polite">
+      <div>
+        <div id="detailTime" class="detail-time"></div>
+        <div id="detailElapsed" class="elapsed"></div>
+      </div>
+      <div>
+        <div class="detail-head">
+          <h2 id="detailTitle" class="detail-title"></h2>
+          <span id="detailTag" class="badge"></span>
+        </div>
+        <p id="detailText" class="detail-text"></p>
+        <p id="detailContext" class="context"></p>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Key times">
+      <div class="stat"><strong>8:46 a.m.</strong><span>First impact at the World Trade Center</span></div>
+      <div class="stat"><strong>9:59 a.m.</strong><span>South Tower collapses</span></div>
+      <div class="stat"><strong>10:28 a.m.</strong><span>North Tower collapses</span></div>
+    </section>
+
+    <p class="note">This infographic focuses on the World Trade Center sequence. The broader September 11 attacks also included the attack on the Pentagon and the crash of United Airlines Flight 93 in Pennsylvania.</p>
+  </main>
+
+  <script>
+    const events = [
+      {
+        time:"8:46 a.m.", short:"8:46", title:"Flight 11 strikes the North Tower",
+        tag:"North Tower", elapsed:"Beginning of WTC attack",
+        text:"American Airlines Flight 11 crashes into the North Tower of the World Trade Center, striking floors 93 through 99.",
+        context:"The impact cuts all three emergency stairwells in the impact zone, leaving people above it unable to descend through the building."
+      },
+      {
+        time:"9:03 a.m.", short:"9:03", title:"Flight 175 strikes the South Tower",
+        tag:"South Tower", elapsed:"+17 minutes",
+        text:"United Airlines Flight 175 crashes into the South Tower, striking roughly floors 77 through 85.",
+        context:"The second impact, seen live by television audiences, makes clear that the United States is experiencing a coordinated attack."
+      },
+      {
+        time:"9:37 a.m.", short:"9:37", title:"Pentagon is struck",
+        tag:"Broader attack", elapsed:"+51 minutes",
+        text:"American Airlines Flight 77 crashes into the Pentagon in Arlington, Virginia.",
+        context:"Although outside New York, the Pentagon attack demonstrates the national scope of the coordinated attacks unfolding that morning."
+      },
+      {
+        time:"9:59 a.m.", short:"9:59", title:"South Tower collapses",
+        tag:"South Tower", elapsed:"+73 minutes",
+        text:"After burning for 56 minutes following impact, the South Tower collapses.",
+        context:"The tower hit second is the first of the Twin Towers to fall. Its collapse devastates the surrounding World Trade Center complex and lower Manhattan."
+      },
+      {
+        time:"10:03 a.m.", short:"10:03", title:"Flight 93 crashes in Pennsylvania",
+        tag:"Broader attack", elapsed:"+77 minutes",
+        text:"United Airlines Flight 93 crashes near Shanksville, Pennsylvania, after passengers and crew attempt to regain control of the hijacked aircraft.",
+        context:"Investigators concluded the hijackers intended to strike a target in Washington, D.C."
+      },
+      {
+        time:"10:28 a.m.", short:"10:28", title:"North Tower collapses",
+        tag:"North Tower", elapsed:"+102 minutes",
+        text:"The North Tower collapses after burning for approximately 102 minutes following the first impact.",
+        context:"The collapse marks the destruction of both Twin Towers and transforms the World Trade Center site into the rescue and recovery area that became known as Ground Zero."
+      },
+      {
+        time:"5:20 p.m.", short:"5:20", title:"7 World Trade Center collapses",
+        tag:"WTC complex", elapsed:"Later that day",
+        text:"7 World Trade Center, a 47-story building north of the main World Trade Center plaza, collapses after fires burn for hours.",
+        context:"No aircraft struck WTC 7. The building had been evacuated before its collapse."
+      }
+    ];
+
+    const timeline = document.getElementById("timeline");
+    const detailTime = document.getElementById("detailTime");
+    const detailElapsed = document.getElementById("detailElapsed");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailTag = document.getElementById("detailTag");
+    const detailText = document.getElementById("detailText");
+    const detailContext = document.getElementById("detailContext");
+    const buttons = [];
+
+    function selectEvent(index){
+      const e = events[index];
+      detailTime.textContent = e.time;
+      detailElapsed.textContent = e.elapsed;
+      detailTitle.textContent = e.title;
+      detailTag.textContent = e.tag;
+      detailText.textContent = e.text;
+      detailContext.textContent = e.context;
+      buttons.forEach((button, i) => {
+        button.setAttribute("aria-pressed", i === index ? "true" : "false");
+      });
+    }
+
+    events.forEach((e, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "marker";
+      button.setAttribute("aria-label", `${e.time}: ${e.title}`);
+      button.setAttribute("aria-pressed", "false");
+      button.innerHTML = `
+        <span class="time">${e.short}</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="tag">${e.tag}</span>
+      `;
+      button.addEventListener("click", () => selectEvent(i));
+      timeline.appendChild(button);
+      buttons.push(button);
+    });
+
+    selectEvent(0);
+  </script>
+</body>
+</html>
